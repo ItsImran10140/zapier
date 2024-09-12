@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { Appbar } from "@/components/Appbar";
@@ -6,22 +5,22 @@ import { PrimaryButton } from "@/components/buttons/PrimaryButton";
 import { CheckFeacture } from "@/components/CheckFeacture";
 import { Input } from "@/components/Input";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { BACKEND_URL } from "../config";
 
-function SignUp() {
-  const [name, setName] = useState("");
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
   return (
     <div>
       <Appbar />
       <div className="flex justify-center">
         <div className="flex pt-8 max-w-4xl">
           <div className="flex-1 pt-20 px-4">
-            {/*  */}
             <div className="font-semibold text-3xl pb-4">
-              Join millions worldwide who automate their work.
+              Join Millions worldwide who automate their work using zapier.
             </div>
             <div className="pb-6 pt-4">
               <CheckFeacture label={"Easy setup , no coding required"} />
@@ -29,57 +28,44 @@ function SignUp() {
             <div className="pb-6">
               <CheckFeacture label={"Free forever for core features"} />
             </div>
-            <CheckFeacture label={"14-day trial of premium features & apps"} />
+            <CheckFeacture label={"14-day trail of premium features & apps"} />
           </div>
-          <div>
+          <div className="flex-1 pt-6 pb-6 mt-12 px-4  rounded">
             <Input
-              label={"Name"}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              type="text"
-              placeholder="Your Name"
-            ></Input>
-            <Input
+              onChange={(e) => setEmail(e.target.value)}
               label={"Email"}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
               type="text"
               placeholder="Your Email"
             ></Input>
             <Input
+              onChange={(e) => setPassword(e.target.value)}
               label={"Password"}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
               type="password"
-              placeholder="Your Password"
+              placeholder="Password"
             ></Input>
-
             <div className="pt-4">
               <PrimaryButton
                 onClick={async () => {
                   const res = await axios.post(
-                    `${BACKEND_URL}/api/v1/user/signup`,
+                    `${BACKEND_URL}/api/v1/user/login`,
                     {
                       username: email,
                       password,
-                      name,
                     }
                   );
+                  localStorage.setItem("token", res.data.token);
+                  router.push("/dashboard");
                 }}
                 size="big"
               >
-                Get Started free
+                Login
               </PrimaryButton>
             </div>
           </div>
-          {/*  */}
         </div>
       </div>
     </div>
   );
 }
 
-export default SignUp;
+export default Login;
